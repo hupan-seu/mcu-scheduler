@@ -1,0 +1,43 @@
+#mdk obj file
+*.d
+*.crf
+*.o
+*.__i
+*.htm
+*.plg
+*.tra
+*.sct
+*.iex
+*.lnp
+*.dep
+*.hex
+*.axf
+*.lnp
+*.dep
+
+#mdk list file
+*.lst
+*.map
+
+# Object files
+*.ko
+*.obj
+*.elf
+
+#source insight
+*.SearchResults
+*.PRI
+*.PS
+*.WK3
+*.IMB
+*.IMD
+*.PFI
+*.PO
+*.PR
+*.IAB
+*.IAD
+
+#add something
+demo/keil
+demo/SI
+
