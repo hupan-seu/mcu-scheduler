@@ -1,7 +1,7 @@
 #define SCHED_C
 
 #include <stdio.h>
-#include "system_types.h"
+#include "sche_types.h"
 
 #include "scheduler_cfg.h"
 
@@ -9,21 +9,6 @@
 #include "sche_mcu.h"
 #include "scheduler.h"
 #include "sw_timer.h"
-
-
-//#include "dma.h"
-//#include "epm_pkg.h"
-//#include "led.h"
-
-//#include "can_type.h"
-//#include "can_dll.h"
-//#include "can_il.h"
-//#include "drive_par.h"
-//#include "TBox_Uart.h"
-//#include "TBox_Upload.h"
-//#include "TBox_Ctrl.h"
-//#include "TBox_Update.h"
-//#include "TBox_Set.h"
 
 /**
  * 静态函数声明 
@@ -165,23 +150,22 @@ static void Sche_Init(void)
 {
 	UINT8 i;
 
-	//初始化内核状态
+	// 初始化内核状态
 	scheKernel.loop_context = SCHE_INITIAL_CONTEXT; 
 	scheKernel.requested_context = SCHE_INITIAL_CONTEXT; 
 	scheKernel.nvram_ptr = scheRamCheckListRom;
 
-	//初始化Robbin任务指针
+	// 初始化Robbin任务指针
     robinTask.func_posi = 0;
 
-
-	//初始化快任务
+	// 初始化快任务
     for(i=0; i<SCHE_NUM_FAST_TASKS; i++)
     {
     	fastTask.func_count[i] = fastTask.func_task[i].reload_value;
 		fastTask.func_flag[i] = FALSE;
     }
 
-	//初始化慢任务
+	// 初始化慢任务
 	slowTask.func_posi = 0;
 	for(i=0; i<SCHE_NUM_FAST_TASKS; i++)
 	{
@@ -386,7 +370,6 @@ static void Sche_RunScheduler(void)
 			continue;
 		}
 		
-        
 		if (ScheMcu_SleepRequest() == TRUE) 		// 检查睡眠需求
 		{
 			break; 

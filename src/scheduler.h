@@ -5,14 +5,15 @@
 #include "scheduler_cfg.h"
 #include "sche_types.h"
 
+// 内核状态结构体
 typedef struct
 {
-	UINT8 loop_context;				//内核工作模式
-	UINT8 requested_context;		//需要切换的工作模式
+	UINT8 loop_context;				// 内核工作模式
+	UINT8 requested_context;		// 需要切换的工作模式
 	BOOL (*const *nvram_ptr)(void);
 }Sche_Kernel_Struct;
 
-//定时任务的结构体
+// 定时任务的结构体
 typedef struct
 {
 	void  (*task_name)(void);
@@ -20,13 +21,14 @@ typedef struct
    	UINT8 loop_membership;
 }Sche_TimeTask_Struct;
 
-//空闲任务的结构体
+// 空闲任务的结构体
 typedef struct 
 {
 	void (*task_name)(void);
     UBYTE loop_membership;
 } Sche_Robin_Struct;
 
+// 快定时任务
 typedef struct
 {
 	UINT8 func_count[SCHE_NUM_FAST_TASKS + 1];
@@ -34,6 +36,7 @@ typedef struct
 	const Sche_TimeTask_Struct func_task[SCHE_NUM_FAST_TASKS+ 1];
 }Sche_FastTask_Struct;
 
+// 慢定时任务
 typedef struct
 {
 	UINT8 func_posi;
@@ -42,6 +45,7 @@ typedef struct
 	const Sche_TimeTask_Struct func_task[SCHE_NUM_SLOW_TASKS + 1];
 }Sche_SlowTask_Struct;
 
+// 空闲任务
 typedef struct
 {
 	UINT8 func_posi;

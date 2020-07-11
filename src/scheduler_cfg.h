@@ -2,109 +2,70 @@
 #ifndef SCHEDULER_CFG_H_
 #define SCHEDULER_CFG_H_
 
+// 添加自己任务的头文件
+// #include "task1.h"
+// #include "task2.h"
+// #include "task3.h"
+// #include "task4.h"
+// #include "task5.h"
 
-// #include "gpio.h"
-// #include "dma.h"
-// #include "uart.h"
-// #include "led.h"
-// #include "Terminal.h"
-// #include "gprs.h"
-
-//#include "idd01.h"
-//#include "board.h"
-
-// 几种工作模式
-#define  MODE_TEST   	0x08  		//测试模式
-#define  MODE_DLD      	0x04  		//老化模式
-#define  MODE_RE1       0x02  		//保留
-#define  MODE_NORMAL    0x01  		//正常模式
+/**
+ * 自定义几种内核工作模式，每个任务可以指定只在特定的模式下才会运行
+ * 例如正常工作模式，产线测试模式，产线老化模式等
+ * 每种模式占1bit
+*/
+#define  SCHE_MODE_1    0x01  		
+#define  SCHE_MODE_2    0x02  		
+#define  SCHE_MODE_3    0x04  		
+#define  SCHE_MODE_4   	0x08  	
 
 // 初始化内核模式
-#define SCHE_INITIAL_CONTEXT	MODE_NORMAL
+#define SCHE_INITIAL_CONTEXT	SCHE_MODE_1
 
-// 冷启动函数列表
-#define PROD_SPEC_COLD_START_LIST   \
-			GPIO_ColdInit,\
-			Dma_ColdInit,\
-			LED_ColdInit,\
-			TermUart_Init,\
-			TermSend_Init,\
-			TermRec_Init,\
-			TermLog_Init,\
-			Gprs_ColdInit,\
-			/*CanDll_ColdInit,\
-			CanIl_ColdInit,\
-			DrivePar_ColdInit,\
-			TBoxUpload_ColdInit,\
-			TBoxCtrl_ColdInit,\
-			TBoxUpdate_ColdInit,\
-			TBoxSet_ColdInit,\
-			*/
+// 任务初始化函数列表
+#define PROD_SPEC_COLD_START_LIST \
+			Task1_ColdInit,\
+			Task2_ColdInit,\
+			Task3_ColdInit,\
+			Task4_ColdInit,\
+			Task5_ColdInit,\
 
-// RAM检查函数列表
-#define PROD_SPEC_NVRAM_CHECK_LIST 	 \
+// 任务检查检查函数列表
+#define PROD_SPEC_NVRAM_CHECK_LIST \
+			Task1_Check,\
 			
-// 睡眠函数列表
-#define PROD_SPEC_SLEEP_LIST 	\
-			Gprs_Sleep,\
-			TermLog_Sleep,\
-			TermRec_Sleep,\
-			TermSend_Sleep,\
-			TermUart_Sleep,\
-			LED_Sleep,\
-			Dma_Sleep,\
-			GPIO_Sleep,\
-			/*TBoxSet_Sleep,\
-			TBoxUpdate_Sleep,\
-			TBoxCtrl_Sleep,\
-			TBoxUpload_Sleep,\
-			DrivePar_Sleep,\
-			CanIl_Sleep,\
-			CanDll_Sleep,\	
-			EpmPkg_Sleep,\*/
+// 单片机休眠前，任务函数列表
+#define PROD_SPEC_SLEEP_LIST \
+			Task1_Sleep,\
+			Task2_Sleep,\
+			Task3_Sleep,\
+			Task4_Sleep,\
+			Task5_Sleep,\
 			
-// 唤醒函数列表
-#define PROD_SPEC_WAKEUP_LIST	\
-			GPIO_Wakeup,\
-			Dma_Wakeup,\
-			LED_Wakeup,\
-			TermUart_Wakeup,\
-			TermSend_Wakeup,\
-			TermRec_Wakeup,\
-			TermLog_Wakeup,\
-			Gprs_Wakeup,\
-			/*CanDll_Wakeup,\
-			CanIl_Wakeup,\
-			DrivePar_Wakeup,\
-			TBoxUpload_Wakeup,\
-			TBoxCtrl_Wakeup,\
-			TBoxUpdate_Wakeup,\
-			TBoxSet_Wakeup,\
-			*/
-
+// 单片机从休眠唤醒后，任务函数列表
+#define PROD_SPEC_WAKEUP_LIST \
+			Task1_Wakeup,\
+			Task2_Wakeup,\
+			Task3_Wakeup,\
+			Task4_Wakeup,\
+			Task5_Wakeup,\
      
-// RRobin函数列表和执行选项 
-#define SCHE_NUM_ROBIN_TASK	2
-#define  SCHE_LIST_ROBIN_TASK		\
-	{LED_KSRRobin, MODE_NORMAL},\
-	{TermLog_Task, MODE_NORMAL},\
-	/*{CanIl_CheckTimeout_RRobin,	MODE_TEST|MODE_NORMAL},\*/
-	
-// 快函数列表和执行选项 
-#define SCHE_NUM_FAST_TASKS   2
+// 快定时任务，运行函数列表 
+#define SCHE_NUM_FAST_TASKS 2
 #define SCHE_LIST_FAST_TASKS		\
-	{Gprs_Task,  2, MODE_NORMAL},\
-	{TermRec_Task, 2, MODE_NORMAL},\
-	/*{CanDll_Task, 2, MODE_NORMAL},\*/
-	/*{CanDll_Task,	1, MODE_TEST|MODE_NORMAL}, \*/
+	{Task1_Run, 2, SCHE_MODE_1|SCHE_MODE_2},\
+	{Task2_Run, 1, SCHE_MODE_3},\
 
 
-// 慢函数列表和执行选项
-#define SCHE_NUM_SLOW_TASKS    1
-#define SCHE_LIST_SLOW_TASKS      \
-	{TermSend_Task,  5, MODE_NORMAL},\
-	/*{Board_Task, 50, MODE_NORMAL},\*/
-	/*{TBoxUpload_Task, 20, MODE_TEST|MODE_NORMAL},	\*/
-	/*{TBoxUpdate_Task, 40, MODE_TEST|MODE_NORMAL},	\	*/		
+// 慢定时任务，运行函数列表 
+#define SCHE_NUM_SLOW_TASKS 1
+#define SCHE_LIST_SLOW_TASKS \
+	{Task3_Run,  5, SCHE_MODE_1},\		
+
+// 空闲任务，运行函数列表 
+#define SCHE_NUM_ROBIN_TASK	2
+#define  SCHE_LIST_ROBIN_TASK \
+	{Task4_Run, SCHE_MODE_1},\
+	{Task5_Run, SCHE_MODE_1},\
 
 #endif
