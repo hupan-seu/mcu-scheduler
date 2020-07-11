@@ -1,28 +1,26 @@
-/******************************************************************************
-  
-         CONFIDENTIAL - Auto_Linked
-
-
-
-******************************************************************************/
 #define _SCHE_TIMER_C_
 
+#include "sche_types.h"
 
-#include "system_types.h"
-#include "stm32f0xx_misc.h"
-#include "stm32f0xx_rcc.h"		//各个模块时钟
-#include "stm32f0xx_tim.h"
+// 添加依赖硬件的头文件
+// #include "stm32f0xx_misc.h"
+// #include "stm32f0xx_rcc.h"
+// #include "stm32f0xx_tim.h"
 
 #include "scheduler.h"
 #include "sche_timer.h"
 
 
-
+/**
+ * 静态变量
+*/
 static volatile UINT16 CountPer4msTo100;
 static volatile UINT16 Count_Sec;						//提供比较精确的秒计时, 外部文件禁止修改
 static volatile UINT16 CountPer4ms;
 
-
+/**
+ * 静态方法
+*/
 static void ScheTimer_CountTick(void);
 
 /*void ScheTimer_Init(void)
@@ -60,6 +58,9 @@ static void ScheTimer_CountTick(void);
 	//return;
 //}
 
+/**
+ * 配置和启动定时器
+*/
 void ScheTimer_Init(void)
 {
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
@@ -82,7 +83,6 @@ void ScheTimer_Init(void)
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;	//计数模式
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
 	
-
 	//捕获通道1
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
@@ -102,13 +102,17 @@ void ScheTimer_Init(void)
 	CountPer4ms = 0;
 }
 
-//禁止内核调度中断
+/**
+ * 禁止内核调度中断
+*/
 void ScheTimer_disable_interrupt(void)
 {
 	TIM_ITConfig(TIM3,TIM_IT_CC1, DISABLE);
 }
 
-//使能内核调度中断
+/**
+ * 使能内核调度中断
+*/
 void ScheTimer_enable_interrupt(void)
 {
 	TIM_ITConfig(TIM3,TIM_IT_CC1, ENABLE);  
@@ -134,6 +138,9 @@ void ScheTimer_enable_interrupt(void)
 	return;
 }*/
 
+/**
+ * 中断处理函数
+*/
 void TIM3_IRQHandler(void)
 {
 	uint16_t capture = 0;
@@ -176,7 +183,3 @@ static void ScheTimer_CountTick(void)
 
 	return;
 }
-
-
-
-

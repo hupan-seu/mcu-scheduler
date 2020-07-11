@@ -1,4 +1,4 @@
-#mdk obj file
+# mdk obj file
 *.d
 *.crf
 *.o
@@ -15,7 +15,7 @@
 *.lnp
 *.dep
 
-#mdk list file
+# mdk list file
 *.lst
 *.map
 
@@ -24,7 +24,7 @@
 *.obj
 *.elf
 
-#source insight
+# source insight
 *.SearchResults
 *.PRI
 *.PS
@@ -37,7 +37,11 @@
 *.IAB
 *.IAD
 
-#add something
+# vscode
+*.code-workspace
+*.vscode
+
+# demo
 demo/keil
 demo/SI
 

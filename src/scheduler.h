@@ -2,17 +2,8 @@
 #ifndef SCHEDULER_H_
 #define SCHEDULER_H_
 
-/* Includes ------------------------------------------------------------------- */
 #include "scheduler_cfg.h"
-#include "system_types.h"
-
-
-
-
-
-/***************************************************************************  
- 	结构体定义 
-***************************************************************************/
+#include "sche_types.h"
 
 typedef struct
 {
@@ -57,18 +48,9 @@ typedef struct
 	const Sche_Robin_Struct func_task[SCHE_NUM_ROBIN_TASK + 1];
 }Sche_RobinTask_Struct;
 
-
-
 UINT8 Sche_GetContext(void);
 void Sche_SetContext(UINT8 requested_context);
 void Sche_IsrBody(void);
 void Sche_Service(void);
 
-#endif /* SCHEDULER_H_ */
-
-/**
- * @}
- */
-    
-/* --------------------------------- End Of File ------------------------------ */
-
+#endif 

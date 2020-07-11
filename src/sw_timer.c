@@ -1,13 +1,7 @@
-
 #define SW_TIMER_C_
 
-
-  
 #include "scheduler.h"
 #include "sw_timer.h"
-
- 
-
 
 //每个软件定时器的 16 bit 定义如下:
 //  
@@ -106,5 +100,3 @@ UINT8 SwTimer_Check(SWTIMERS timer_id)
 
 	return(TIMER_EXPIRED);
 }
-
-

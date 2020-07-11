@@ -1,13 +1,5 @@
-
 #ifndef SW_TIMER_H_
 #define SW_TIMER_H_
-
-
-
-
-/***************************************************************************
-   P U B L I C   M A C R O   A N D   T Y P E   D E F I N I T I O N S
-***************************************************************************/
 
 typedef enum
 {
@@ -15,8 +7,6 @@ typedef enum
 		SW_TIMERS_LED1_BLINK_TIMEOUT,
 		SW_TIMERS_LED2_BLINK_TIMEOUT,
 		SW_TIMERS_GPRS_STATE_TIMEOUT,
-
-		
 		SW_TIMERS_CAN_SEND_TIMEOUT,
 		SW_TIMERS_GPRS_SEND_TIMEOUT,
 		SW_TIMERS_UART1_RE_DELAY,
@@ -45,27 +35,18 @@ typedef enum
    		MAX_SW_TIMER_ID
 } SWTIMERS;
 
-
 /* Values returned from KernelCheck13BitTimer().*/
 #define   TIMER_CLEAR       0x00
 #define   TIMER_EXPIRED     0x02
 #define   TIMER_RUNNING     0x80
 
-
 /*Valid values for timer base for the KernelStart13BitTimer() service.*/
 #define TIMER_13BIT_BASE_4MS    ((UINT16)0x0000u)
 #define TIMER_13BIT_BASE_512MS  ((UINT16)0x8000u)
-
 
 void Swtimer_UpdateCount(void);
 void SwTimer_Start(UINT16 timer_base, UINT16 timeout_time, SWTIMERS timer_id);
 void SwTimer_Clear(SWTIMERS timer_id);
 UINT8 SwTimer_Check(SWTIMERS timer_id);
 
-
 #endif
-
-
-
-
-

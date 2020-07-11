@@ -25,30 +25,24 @@
 //#include "TBox_Update.h"
 //#include "TBox_Set.h"
 
-
-
-/***************************************************************************  
- 	静态函数声明 
-***************************************************************************/ 
-static void Sche_TimedCounters(void);				//定时任务计数并更新标志位
-static void Sche_Init(void);							//内核初始化
-static BOOL Sche_RunFastTask(void);					//检查快任务标志位并执行任务
-static BOOL Sche_RunSlowTask(void);					//慢函数每次只执行一个
-static BOOL Sche_RunRobinTask(void);				//执行了一整轮之后返回true
-static void Sche_RunVoidLst(void (*const (*top))(void));//执行 睡眠 苏醒 RAM检查等列表函数
-static void Sche_InitVRam(void);						//检查任务数量定义是否和实际一致
+/**
+ * 静态函数声明 
+*/
+static void Sche_TimedCounters(void);						// 定时任务计数并更新标志位
+static void Sche_Init(void);								// 内核初始化
+static BOOL Sche_RunFastTask(void);							// 检查快任务标志位并执行任务
+static BOOL Sche_RunSlowTask(void);							// 慢函数每次只执行一个
+static BOOL Sche_RunRobinTask(void);						// 执行了一整轮之后返回true
+static void Sche_RunVoidLst(void (*const (*top))(void));	// 执行 睡眠 苏醒 RAM检查等列表函数
+static void Sche_InitVRam(void);							// 检查任务数量定义是否和实际一致
 static void Sche_NvRamCheckSignal(void);
 static BOOL Sche_NvRamCheckAll(void);
-static void Sche_UpdateContext(void);				//更新内核状态
-static void Sche_RunScheduler(void);				//循环执行内核任务，直到有单片机休眠需求时退出
+static void Sche_UpdateContext(void);						// 更新内核状态
+static void Sche_RunScheduler(void);						// 循环执行内核任务，直到有单片机休眠需求时退出
 	
-
-
-
-/***************************************************************************  
- 	变量定义 
-***************************************************************************/
-
+/**
+ * 变量定义
+*/
 static Sche_Kernel_Struct scheKernel;
 
 static Sche_FastTask_Struct fastTask = {
@@ -80,38 +74,45 @@ static Sche_RobinTask_Struct robinTask =
 };
 
 
-//冷启动函数列表
+/**
+ * 冷启动函数列表
+*/
 static void (*const scheColdInitListRom[])(void) = 
 {
     PROD_SPEC_COLD_START_LIST
     (void(*)(void))0
 };
 
-//RAM检查函数列表
+/**
+ * RAM检查函数列表
+*/
 static BOOL (*const scheRamCheckListRom[])(void)  = 
 {
     PROD_SPEC_NVRAM_CHECK_LIST
     (BOOL (*)(void)) 0
 };
 
-//睡眠函数列表
+/**
+ * 睡眠函数列表
+*/
 static void (*const scheSleepListRom[])(void)  = 
 {
 	PROD_SPEC_SLEEP_LIST
     (void (*)(void)) 0
 };
 
-//唤醒函数列表
+/**
+ * 唤醒函数列表
+*/
 static void (*const scheWakeupListRom[])(void)  = 
 {
     PROD_SPEC_WAKEUP_LIST   
     (void (*)(void)) 0
 };
-
-
-/*----------------------------静态函数--------------------------------*/
  
-//定时任务计数并更新标志位
+/**
+ * 定时任务计数并更新标志位
+*/
 static void Sche_TimedCounters(void)
 {
 	UINT8 i;
@@ -157,7 +158,9 @@ static void Sche_TimedCounters(void)
 }
 
 
-//
+/**
+ * something
+*/
 static void Sche_Init(void)
 {
 	UINT8 i;
@@ -189,8 +192,9 @@ static void Sche_Init(void)
 	return;
 }
 
-
-//检查快任务标志位并执行任务
+/**
+ * 检查快任务标志位，执行任务
+*/
 static BOOL Sche_RunFastTask(void)
 {
 	UINT8 i;
@@ -214,7 +218,12 @@ static BOOL Sche_RunFastTask(void)
 	
 	return re_val;
 }
-static BOOL Sche_RunSlowTask(void)			//慢函数每次只执行一个
+
+/**
+ * 检查慢任务标志位，执行任务
+ * 慢任务每次只执行一个
+*/
+static BOOL Sche_RunSlowTask(void)
 {
 	UINT8 i,index;
 	BOOL run_flag;
@@ -251,7 +260,10 @@ static BOOL Sche_RunSlowTask(void)			//慢函数每次只执行一个
 	return run_flag;
 }
 
-static BOOL Sche_RunRobinTask(void)						//执行了一整轮之后返回true
+/**
+ * 执行空闲任务
+*/
+static BOOL Sche_RunRobinTask(void)
 {
 	UINT8 index;
 	
@@ -277,8 +289,9 @@ static BOOL Sche_RunRobinTask(void)						//执行了一整轮之后返回true
 	return FALSE;
 }
 
-
-//执行 睡眠 苏醒 RAM检查等列表函数
+/**
+ * 执行睡眠、苏醒、RAM检查等列表函数
+*/
 static void Sche_RunVoidLst(void (*const (*top))(void))
 {
     if (top != ((void *) 0))
@@ -293,14 +306,17 @@ static void Sche_RunVoidLst(void (*const (*top))(void))
 	return;
 }
 
-//检查任务数量定义是否和实际一致
+/**
+ * 检查任务数量定义是否和实际一致
+*/
 static void Sche_InitVRam(void)
 {
    
 }
 
-
-
+/**
+ * something
+*/
 static void Sche_NvRamCheckSignal(void)
 {
 	if (*scheKernel.nvram_ptr == NULL)
@@ -336,52 +352,53 @@ static BOOL Sche_NvRamCheckAll(void)
 	return TRUE;
 }
 
+/**
+ * something
+*/
 static void Sche_UpdateContext(void)
 {
 }
 
-//循环执行内核任务，直到有单片机休眠需求时退出
+/**
+ * 循环执行内核任务，直到有单片机休眠需求时退出
+*/
 static void Sche_RunScheduler(void)
 {
 	BOOL func_flag;
 
 	while(1)
 	{      
-		func_flag = Sche_RunFastTask();				//快任务的优先级最高
+		func_flag = Sche_RunFastTask();				// 快任务的优先级最高
 		if(func_flag == TRUE)
 		{
 			continue;
 		}
 
-		func_flag = Sche_RunSlowTask();				//慢函数每次只执行一个
+		func_flag = Sche_RunSlowTask();				// 慢函数每次只执行一个
 		if(func_flag == TRUE)
 		{
 			continue;
 		}
 							
-		func_flag = Sche_RunRobinTask();			//执行 RRobin 函数列表,每次循环只执行一个函数
-		if(func_flag == FALSE)						//只有在空闲任务执行了一轮之后，才做下面的工作 
+		func_flag = Sche_RunRobinTask();			// 执行 RRobin 函数列表,每次循环只执行一个函数
+		if(func_flag == FALSE)						// 只有在空闲任务执行了一轮之后，才做下面的工作 
 		{
 			continue;
 		}
 		
         
-		if (ScheMcu_SleepRequest() == TRUE) 		//检查睡眠需求
+		if (ScheMcu_SleepRequest() == TRUE) 		// 检查睡眠需求
 		{
 			break; 
 		}			
 		
-        Sche_UpdateContext();						//更新内核状态  
-        ScheMcu_UpdateWatchdog();   				//更新看门狗
-		Sche_NvRamCheckSignal();					//执行内存检查
+        Sche_UpdateContext();						// 更新内核状态  
+        ScheMcu_UpdateWatchdog();   				// 更新看门狗
+		Sche_NvRamCheckSignal();					// 执行内存检查
 	}
 
 	return;
 }
-
-
-/*----------------------------对外接口函数--------------------------------*/
-
 
 UINT8 Sche_GetContext(void)
 {
@@ -395,20 +412,23 @@ void Sche_SetContext(UINT8 requested_context)
     return;
 }  
    
-
-//
+/**
+ * something
+*/
 void Sche_IsrBody(void)
 {
-	Swtimer_UpdateCount();				//更新软件定时器
-   	Sche_TimedCounters(); 				//更新定时任务标记   
+	Swtimer_UpdateCount();				// 更新软件定时器
+   	Sche_TimedCounters(); 				// 更新定时任务标记   
 }
 
-
+/**
+ * something
+*/
 void Sche_Service(void)
 {
 	ScheMcu_DisableInterrupts();
-	Sche_InitVRam();								//检查任务宏定义和任务数量是否一致
-    Sche_RunVoidLst(scheColdInitListRom);  			//执行冷启动函数列表
+	Sche_InitVRam();								// 检查任务宏定义和任务数量是否一致
+    Sche_RunVoidLst(scheColdInitListRom);  			// 执行冷启动函数列表
 	ScheMcu_EnableInterrupts();
 
 	while(1)
@@ -418,23 +438,17 @@ void Sche_Service(void)
 		Sche_RunScheduler();
 		ScheTimer_disable_interrupt();
 
-		Sche_RunVoidLst(scheSleepListRom);			//执行睡眠函数列表
-		ScheMcu_Sleep(); 							//使单片机进入睡眠状态
+		Sche_RunVoidLst(scheSleepListRom);			// 执行睡眠函数列表
+		ScheMcu_Sleep(); 							// 使单片机进入睡眠状态
 
 		ScheMcu_DisableInterrupts();
-		if (Sche_NvRamCheckAll() == FALSE) 			//执行NvRamCheck列表函数
+		if (Sche_NvRamCheckAll() == FALSE) 			// 执行NvRamCheck列表函数
 		{ 
 			ScheMcu_ReportError(0x0A); 
 		}	
-		Sche_InitVRam();							//检查任务宏定义和任务数量是否一致
-		Sche_RunVoidLst(scheWakeupListRom);  		//执行wakeup列表函数
+		Sche_InitVRam();							// 检查任务宏定义和任务数量是否一致
+		Sche_RunVoidLst(scheWakeupListRom);  		// 执行wakeup列表函数
 		ScheMcu_EnableInterrupts();
 	}
 
 }
-
-
-
-
-
-
