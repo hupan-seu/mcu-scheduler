@@ -40,6 +40,7 @@
 # vscode
 *.code-workspace
 *.vscode
+.idea/
 
 # demo
 demo/keil
